@@ -110,6 +110,11 @@
             color: #1a3a2e;
         }
 
+        .status-trial {
+            background: rgba(255, 193, 7, 0.8);
+            color: #1a3a2e;
+        }
+
         .status-inactive {
             background: rgba(255, 138, 101, 0.8);
             color: #1a3a2e;
@@ -201,20 +206,15 @@
             color: #ffab91;
         }
 
-        .config-box {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            word-break: break-all;
+        .trial-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 193, 7, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
             margin-top: 10px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.8;
+            font-size: 14px;
         }
 
         .hidden {
@@ -232,7 +232,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Сообщение об ошибке (если открыто не в Telegram) -->
         <div id="error-container" class="hidden">
             <div class="error-message">
                 ⚠️ Откройте это приложение через Telegram бота
@@ -244,7 +243,6 @@
             <p id="user-name">Загрузка...</p>
         </div>
 
-        <!-- Профиль -->
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">👤</div>
@@ -261,8 +259,13 @@
             <div class="info-row">
                 <span class="info-label">Подписка</span>
                 <span class="info-value">
-                    <span class="status-badge status-inactive" id="subscription-status">Неактивна</span>
+                    <span class="status-badge status-inactive" id="subscription-status">Загрузка...</span>
                 </span>
+            </div>
+            <div id="trial-indicator" class="hidden">
+                <div class="trial-badge">
+                    🎁 <span id="trial-text">Пробный период: 3 дня</span>
+                </div>
             </div>
             <div class="info-row">
                 <span class="info-label">Устройств</span>
@@ -270,7 +273,6 @@
             </div>
         </div>
 
-        <!-- Серверы -->
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">🌍</div>
@@ -316,7 +318,6 @@
             </div>
         </div>
 
-        <!-- Тарифы -->
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">💎</div>
@@ -326,13 +327,13 @@
                 <div class="tariff-info">
                     <div class="tariff-period">7 дней</div>
                 </div>
-                <div class="tariff-price">46 ₽</div>
+                <div class="tariff-price">49 ₽</div>
             </div>
             <div class="tariff-item" onclick="selectTariff(14, 92)">
                 <div class="tariff-info">
                     <div class="tariff-period">14 дней</div>
                 </div>
-                <div class="tariff-price">92 ₽</div>
+                <div class="tariff-price">99 ₽</div>
             </div>
             <div class="tariff-item" onclick="selectTariff(30, 199)">
                 <div class="tariff-info">
@@ -344,11 +345,10 @@
                 <div class="tariff-info">
                     <div class="tariff-period">3 месяца</div>
                 </div>
-                <div class="tariff-price">597 ₽</div>
+                <div class="tariff-price">599 ₽</div>
             </div>
         </div>
 
-        <!-- Кнопки действий -->
         <button class="btn btn-primary" onclick="topUpBalance()">
             💳 Пополнить баланс
         </button>
@@ -358,19 +358,77 @@
     </div>
 
     <script>
-        // Проверка доступности Telegram Web App
+        const API_URL = 'http://213.155.28.160:8080';
+        
+        let configs = {
+            'yandex': 'Загрузка...',
+            'gosuslugi': 'Загрузка...',
+            'vk': 'Загрузка...'
+        };
+        
+        let userData = {
+            balance: 0,
+            subscription: {
+                active: true,
+                days_left: 3,
+                is_trial: true
+            },
+            devices: 0
+        };
+        
+        async function loadConfigs() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                configs = data.configs;
+                console.log('Конфиги загружены');
+            } catch (error) {
+                console.error('Ошибка загрузки конфигов:', error);
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('user-balance').textContent = `${userData.balance} ₽`;
+            
+            const subStatus = document.getElementById('subscription-status');
+            const trialIndicator = document.getElementById('trial-indicator');
+            const trialText = document.getElementById('trial-text');
+            
+            if (userData.subscription && userData.subscription.active) {
+                const daysLeft = userData.subscription.days_left;
+                
+                if (userData.subscription.is_trial) {
+                    subStatus.textContent = `Пробный (${daysLeft} дн.)`;
+                    subStatus.className = 'status-badge status-trial';
+                    trialIndicator.classList.remove('hidden');
+                    trialText.textContent = `Пробный период: ${daysLeft} дней`;
+                } else {
+                    subStatus.textContent = `Активна (${daysLeft} дн.)`;
+                    subStatus.className = 'status-badge status-active';
+                    trialIndicator.classList.add('hidden');
+                }
+            } else {
+                subStatus.textContent = 'Неактивна';
+                subStatus.className = 'status-badge status-inactive';
+                trialIndicator.classList.add('hidden');
+            }
+            
+            document.getElementById('devices-count').textContent = `${userData.devices}/4`;
+        }
+        
+        loadConfigs();
+        
         let tg = window.Telegram?.WebApp;
         
         if (!tg) {
             console.error('Telegram WebApp не доступен');
             document.getElementById('error-container').classList.remove('hidden');
             document.getElementById('user-name').textContent = 'Откройте через бота';
+            updateUI();
         } else {
-            // Инициализация Telegram Web App
             tg.expand();
             tg.ready();
 
-            // Получить данные пользователя
             const user = tg.initDataUnsafe?.user;
             
             if (user) {
@@ -380,73 +438,71 @@
                 document.getElementById('user-name').textContent = 'Гость';
                 document.getElementById('user-id').textContent = 'Неизвестно';
             }
-
-            // Установить тему из Telegram
-            if (tg.themeParams?.bg_color) {
-                document.body.style.background = tg.themeParams.bg_color;
-            }
+            
+            updateUI();
         }
 
-        // Функция копирования конфига
         function copyConfig(server) {
-            // В реальном приложении здесь будет API запрос
-            const configs = {
-                'yandex': 'vless://your-config-yandex@213.155.28.160:8443',
-                'gosuslugi': 'vless://your-config-gosuslugi@213.155.28.160:666',
-                'vk': 'vless://your-config-vk@213.155.28.160:443'
-            };
-            
             const config = configs[server];
             
-            // Копировать в буфер обмена
+            if (!config || config === 'Загрузка...') {
+                if (tg) {
+                    tg.showAlert('⚠️ Конфигурация загружается...');
+                } else {
+                    alert('⚠️ Конфигурация загружается...');
+                }
+                return;
+            }
+            
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(config).then(() => {
                     if (tg) {
-                        tg.showAlert('✅ Конфигурация скопирована!\n\nВставьте в приложение Happ для подключения.');
+                        tg.showAlert('✅ Конфигурация скопирована!\n\nВставьте в приложение Happ.');
                     } else {
-                        alert('✅ Конфигурация скопирована!');
+                        alert('✅ Скопировано!');
                     }
                 }).catch(() => {
                     if (tg) {
-                        tg.showAlert(`Конфигурация:\n${config}`);
+                        tg.showAlert(`${config}`);
                     } else {
-                        alert(`Конфигурация:\n${config}`);
+                        alert(config);
                     }
                 });
             } else {
                 if (tg) {
-                    tg.showAlert(`Конфигурация:\n${config}`);
+                    tg.showAlert(`${config}`);
                 } else {
-                    alert(`Конфигурация:\n${config}`);
+                    alert(config);
                 }
             }
         }
 
-        // Выбор тарифа
         function selectTariff(days, price) {
             if (!tg) {
-                alert(`Активировать подписку на ${days} дней за ${price} ₽?`);
+                alert(`Подписка ${days} дней - ${price} ₽`);
                 return;
             }
             
             tg.showConfirm(`Активировать подписку на ${days} дней за ${price} ₽?`, (confirmed) => {
                 if (confirmed) {
-                    // Здесь будет API запрос к боту
-                    tg.showAlert('⚠️ Недостаточно средств на балансе.\n\nПополните баланс для активации подписки.');
+                    if (userData.balance < price) {
+                        tg.showAlert('⚠️ Недостаточно средств на балансе.\n\nПополните баланс.');
+                    } else {
+                        tg.showAlert('✅ Подписка активирована!\n\n(Демо - нужен API)');
+                    }
                 }
             });
         }
 
-        // Пополнение баланса
         function topUpBalance() {
             if (!tg) {
-                alert('Пополнение баланса доступно только в Telegram');
+                alert('Доступно только в Telegram');
                 return;
             }
             
             tg.showPopup({
                 title: '💳 Пополнение баланса',
-                message: 'Выберите сумму пополнения:',
+                message: 'Выберите сумму:',
                 buttons: [
                     {id: '100', type: 'default', text: '100 ₽'},
                     {id: '300', type: 'default', text: '300 ₽'},
@@ -454,21 +510,19 @@
                     {type: 'cancel'}
                 ]
             }, (buttonId) => {
-                if (buttonId !== null && buttonId !== 'cancel') {
-                    tg.showAlert(`Переход к оплате ${buttonId} ₽...\n\n(В разработке)`);
+                if (buttonId && buttonId !== 'cancel') {
+                    tg.showAlert(`Переход к оплате ${buttonId} ₽...\n\n(ЮKassa в разработке)`);
                 }
             });
         }
 
-        // Поддержка
         function openSupport() {
             if (!tg) {
-                alert('Поддержка доступна только в Telegram');
+                alert('Доступно только в Telegram');
                 return;
             }
-            tg.openTelegramLink('https://t.me/your_support_bot');
+            tg.openTelegramLink('https://t.me/vinivpnhelp');
         }
-    </script>
     </script>
 </body>
 </html>
