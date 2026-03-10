@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Личный кабинет VPN</title>
+    <title>VINI VPN</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -14,515 +14,960 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a3a2e 0%, #0f261c 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #e8f5e9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 80px;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
+            padding: 20px;
         }
 
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            background: rgba(42, 87, 68, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 30px 20px;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card .icon {
             font-size: 28px;
             margin-bottom: 10px;
         }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .card {
-            background: rgba(42, 87, 68, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(129, 199, 132, 0.2);
-            transition: transform 0.2s;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card-icon {
+        .stat-card .value {
             font-size: 24px;
-            margin-right: 10px;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 183, 77, 0.15);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
+        .stat-card .label {
+            font-size: 14px;
             opacity: 0.8;
-            font-size: 14px;
         }
 
-        .info-value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
+        /* Status Badge */
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
+            margin-bottom: 20px;
         }
 
         .status-active {
-            background: rgba(129, 199, 132, 0.8);
-            color: #1a3a2e;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
 
         .status-trial {
-            background: rgba(255, 193, 7, 0.8);
-            color: #1a3a2e;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         .status-inactive {
-            background: rgba(255, 138, 101, 0.8);
-            color: #1a3a2e;
+            background: linear-gradient(135deg, #4b4b4b 0%, #6b6b6b 100%);
         }
 
+        /* Buttons */
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff8a65 0%, #ff7043 100%);
-            color: #1a1a1a;
-            font-weight: 700;
-        }
-
-        .btn-secondary {
-            background: rgba(129, 199, 132, 0.3);
-            color: #e8f5e9;
+            margin-bottom: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn:active {
             transform: scale(0.98);
         }
 
-        .server-list {
-            margin-top: 15px;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        .server-item {
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Server Card */
+        .server-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .server-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            background: rgba(26, 58, 46, 0.5);
-            border-radius: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .server-name {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
         }
 
-        .server-ping {
+        .server-status {
+            padding: 5px 15px;
+            border-radius: 20px;
             font-size: 12px;
-            opacity: 0.7;
-            color: #81c784;
+            background: rgba(56, 239, 125, 0.3);
         }
 
-        .tariff-item {
-            background: rgba(26, 58, 46, 0.4);
-            border-radius: 12px;
+        .config-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
             padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .config-box:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Tariff Card */
+        .tariff-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .tariff-card:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .tariff-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tariff-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .tariff-price {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .tariff-features {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .tariff-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tariff-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Referral */
+        .ref-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ref-link {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            word-break: break-all;
+            font-size: 14px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .ref-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .ref-stat {
+            text-align: center;
+        }
+
+        .ref-stat .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .ref-stat .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+        }
+
+        .nav-item .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item .label {
+            font-size: 12px;
+        }
+
+        /* Instructions */
+        .instruction-step {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .instruction-step .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .instruction-step .step-text {
+            display: inline;
+            font-size: 16px;
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .faq-question {
+            font-weight: 700;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid rgba(129, 199, 132, 0.15);
         }
 
-        .tariff-item:active {
-            background: rgba(26, 58, 46, 0.6);
-        }
-
-        .tariff-info {
-            flex: 1;
-        }
-
-        .tariff-period {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .tariff-price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffab91;
-        }
-
-        .trial-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(255, 193, 7, 0.2);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .hidden {
+        .faq-answer {
             display: none;
+            opacity: 0.9;
+            margin-top: 10px;
+            line-height: 1.6;
         }
 
-        .error-message {
-            background: rgba(239, 68, 68, 0.2);
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+
+        /* Promo Input */
+        .promo-input {
+            width: 100%;
             padding: 15px;
-            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
             margin-bottom: 15px;
-            text-align: center;
+        }
+
+        .promo-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="error-container" class="hidden">
-            <div class="error-message">
-                ⚠️ Откройте это приложение через Telegram бота
-            </div>
-        </div>
-
+        <!-- Header -->
         <div class="header">
-            <h1>🔐 Личный кабинет</h1>
-            <p id="user-name">Загрузка...</p>
+            <h1>🔒 VINI VPN</h1>
+            <p class="subtitle">Безопасный доступ к интернету</p>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">👤</div>
-                <div class="card-title">Ваш профиль</div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">⏱</div>
+                <div class="value" id="days-left">—</div>
+                <div class="label">Дней осталось</div>
             </div>
-            <div class="info-row">
-                <span class="info-label">ID</span>
-                <span class="info-value" id="user-id">...</span>
+            <div class="stat-card">
+                <div class="icon">💰</div>
+                <div class="value" id="balance">—</div>
+                <div class="label">Баланс</div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Баланс</span>
-                <span class="info-value" id="user-balance">0 ₽</span>
+            <div class="stat-card">
+                <div class="icon">📱</div>
+                <div class="value" id="devices">—</div>
+                <div class="label">Устройства</div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Подписка</span>
-                <span class="info-value">
-                    <span class="status-badge status-inactive" id="subscription-status">Загрузка...</span>
-                </span>
+            <div class="stat-card">
+                <div class="icon">👥</div>
+                <div class="value" id="referrals">—</div>
+                <div class="label">Рефералов</div>
             </div>
-            <div id="trial-indicator" class="hidden">
-                <div class="trial-badge">
-                    🎁 <span id="trial-text">Пробный период: 3 дня</span>
+        </div>
+
+        <!-- Status Badge -->
+        <div style="text-align: center;">
+            <span class="status-badge" id="status-badge">Загрузка...</span>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('main')">🏠 Главная</button>
+            <button class="tab" onclick="switchTab('servers')">🌍 Серверы</button>
+            <button class="tab" onclick="switchTab('tariffs')">💎 Тарифы</button>
+            <button class="tab" onclick="switchTab('referral')">👥 Реферал</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Загрузка данных...</p>
+        </div>
+
+        <!-- Main Tab -->
+        <div id="tab-main" class="tab-content active" style="display: none;">
+            <button class="btn btn-success" onclick="openBot()">
+                <span>📱</span> Открыть бота
+            </button>
+
+            <button class="btn btn-primary" onclick="switchTab('servers')">
+                <span>🌍</span> Получить конфиг
+            </button>
+
+            <button class="btn btn-warning" onclick="switchTab('tariffs')">
+                <span>💎</span> Продлить подписку
+            </button>
+
+            <button class="btn btn-secondary" onclick="switchTab('help')">
+                <span>❓</span> Помощь и инструкции
+            </button>
+
+            <!-- Quick Stats -->
+            <div class="server-card">
+                <h3 style="margin-bottom: 15px;">📊 Быстрая информация</h3>
+                <div style="line-height: 2;">
+                    <div>✅ Подписка: <strong id="sub-status">—</strong></div>
+                    <div>♻️ Автопродление: <strong id="auto-renew">—</strong></div>
+                    <div>💰 Баланс: <strong id="balance-info">—</strong></div>
+                    <div>👥 Ваших рефералов: <strong id="ref-count">—</strong></div>
                 </div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Устройств</span>
-                <span class="info-value" id="devices-count">0/3</span>
+        </div>
+
+        <!-- Servers Tab -->
+        <div id="tab-servers" class="tab-content">
+            <h2 style="margin-bottom: 20px;">🌍 Выберите сервер</h2>
+            
+            <div class="server-card">
+                <div class="server-header">
+                    <div class="server-name">🇳🇱 Яндекс (рекомендуем)</div>
+                    <div class="server-status">✅ Онлайн</div>
+                </div>
+                <p style="opacity: 0.8; margin-bottom: 15px;">Оптимизирован для Яндекс сервисов</p>
+                <div class="config-box" id="config-yandex" onclick="copyConfig('yandex')">
+                    Нажмите для копирования конфига...
+                </div>
+                <button class="btn btn-primary" onclick="copyConfig('yandex')">
+                    📋 Скопировать конфиг
+                </button>
+            </div>
+
+            <div class="server-card">
+                <div class="server-header">
+                    <div class="server-name">🇳🇱 Госуслуги</div>
+                    <div class="server-status">✅ Онлайн</div>
+                </div>
+                <p style="opacity: 0.8; margin-bottom: 15px;">Для госуслуг и государственных сайтов</p>
+                <div class="config-box" id="config-gosuslugi" onclick="copyConfig('gosuslugi')">
+                    Нажмите для копирования конфига...
+                </div>
+                <button class="btn btn-primary" onclick="copyConfig('gosuslugi')">
+                    📋 Скопировать конфиг
+                </button>
+            </div>
+
+            <div class="server-card">
+                <div class="server-header">
+                    <div class="server-name">🇳🇱 VK</div>
+                    <div class="server-status">✅ Онлайн</div>
+                </div>
+                <p style="opacity: 0.8; margin-bottom: 15px;">Оптимизирован для VK и социальных сетей</p>
+                <div class="config-box" id="config-vk" onclick="copyConfig('vk')">
+                    Нажмите для копирования конфига...
+                </div>
+                <button class="btn btn-primary" onclick="copyConfig('vk')">
+                    📋 Скопировать конфиг
+                </button>
+            </div>
+
+            <div class="instruction-step">
+                <span class="step-number">1</span>
+                <span class="step-text">Скопируйте конфиг нажав на него</span>
+            </div>
+            <div class="instruction-step">
+                <span class="step-number">2</span>
+                <span class="step-text">Откройте приложение Happ</span>
+            </div>
+            <div class="instruction-step">
+                <span class="step-number">3</span>
+                <span class="step-text">Нажмите + → Import from clipboard</span>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">🌍</div>
-                <div class="card-title">Доступные серверы</div>
+        <!-- Tariffs Tab -->
+        <div id="tab-tariffs" class="tab-content">
+            <h2 style="margin-bottom: 20px;">💎 Выберите тариф</h2>
+
+            <div class="tariff-card">
+                <div class="tariff-header">
+                    <div class="tariff-name">7 дней</div>
+                    <div class="tariff-price">49 ₽</div>
+                </div>
+                <ul class="tariff-features">
+                    <li>✅ 3 устройства</li>
+                    <li>✅ Все серверы</li>
+                    <li>✅ Безлимит</li>
+                </ul>
+                <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
-            <div class="server-list">
-                <div class="server-item">
-                    <div class="server-name">
-                        <span>🇳🇱</span>
-                        <div>
-                            <div>Нидерланды (Яндекс)</div>
-                            <div class="server-ping">Пинг: 30ms</div>
-                        </div>
+
+            <div class="tariff-card">
+                <div class="tariff-header">
+                    <div class="tariff-name">14 дней</div>
+                    <div class="tariff-price">99 ₽</div>
+                </div>
+                <ul class="tariff-features">
+                    <li>✅ 3 устройства</li>
+                    <li>✅ Все серверы</li>
+                    <li>✅ Безлимит</li>
+                </ul>
+                <button class="btn btn-primary" onclick="openBot()">Купить</button>
+            </div>
+
+            <div class="tariff-card" style="border-color: #ffd700;">
+                <div class="tariff-header">
+                    <div class="tariff-name">1 месяц ⭐</div>
+                    <div class="tariff-price">199 ₽</div>
+                </div>
+                <ul class="tariff-features">
+                    <li>✅ 3 устройства</li>
+                    <li>✅ Все серверы</li>
+                    <li>✅ Безлимит</li>
+                    <li>⭐ Популярный</li>
+                </ul>
+                <button class="btn btn-success" onclick="openBot()">Купить</button>
+            </div>
+
+            <div class="tariff-card">
+                <div class="tariff-header">
+                    <div class="tariff-name">3 месяца</div>
+                    <div class="tariff-price">599 ₽</div>
+                </div>
+                <ul class="tariff-features">
+                    <li>✅ 3 устройства</li>
+                    <li>✅ Все серверы</li>
+                    <li>✅ Безлимит</li>
+                    <li>💰 Выгодно</li>
+                </ul>
+                <button class="btn btn-primary" onclick="openBot()">Купить</button>
+            </div>
+
+            <div class="tariff-card">
+                <div class="tariff-header">
+                    <div class="tariff-name">1 год 🔥</div>
+                    <div class="tariff-price">2399 ₽</div>
+                </div>
+                <ul class="tariff-features">
+                    <li>✅ 3 устройства</li>
+                    <li>✅ Все серверы</li>
+                    <li>✅ Безлимит</li>
+                    <li>🔥 Максимальная выгода</li>
+                </ul>
+                <button class="btn btn-warning" onclick="openBot()">Купить</button>
+            </div>
+        </div>
+
+        <!-- Referral Tab -->
+        <div id="tab-referral" class="tab-content">
+            <h2 style="margin-bottom: 20px;">👥 Реферальная программа</h2>
+
+            <div class="ref-box">
+                <h3 style="margin-bottom: 15px;">🎁 Ваши награды:</h3>
+                <div style="line-height: 2; margin-bottom: 20px;">
+                    <div>• Вы получаете: <strong>100 ₽</strong></div>
+                    <div>• Ваш друг получает: <strong>50 ₽</strong></div>
+                </div>
+
+                <h3 style="margin-bottom: 10px;">🔗 Ваша ссылка:</h3>
+                <div class="ref-link" id="ref-link" onclick="copyRefLink()">
+                    Загрузка...
+                </div>
+
+                <button class="btn btn-success" onclick="shareRefLink()">
+                    📤 Поделиться ссылкой
+                </button>
+
+                <h3 style="margin-bottom: 15px; margin-top: 20px;">📊 Статистика:</h3>
+                <div class="ref-stats">
+                    <div class="ref-stat">
+                        <div class="value" id="ref-total">—</div>
+                        <div class="label">Приглашено</div>
                     </div>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 16px;" onclick="copyConfig('yandex')">
-                        Скопировать
-                    </button>
-                </div>
-                <div class="server-item">
-                    <div class="server-name">
-                        <span>🇳🇱</span>
-                        <div>
-                            <div>Нидерланды (Госуслуги)</div>
-                            <div class="server-ping">Пинг: 30ms</div>
-                        </div>
+                    <div class="ref-stat">
+                        <div class="value" id="ref-earnings">—</div>
+                        <div class="label">Заработано</div>
                     </div>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 16px;" onclick="copyConfig('gosuslugi')">
-                        Скопировать
-                    </button>
                 </div>
-                <div class="server-item">
-                    <div class="server-name">
-                        <span>🇳🇱</span>
-                        <div>
-                            <div>Нидерланды (VK)</div>
-                            <div class="server-ping">Пинг: 30ms</div>
-                        </div>
-                    </div>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 16px;" onclick="copyConfig('vk')">
-                        Скопировать
-                    </button>
+            </div>
+
+            <div class="server-card">
+                <h3 style="margin-bottom: 15px;">💡 Как это работает?</h3>
+                <div class="instruction-step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Поделитесь своей ссылкой с друзьями</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Друг регистрируется и получает 50₽ бонус</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Вам начисляется 100₽ на баланс</span>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">💎</div>
-                <div class="card-title">Выбор тарифа</div>
-            </div>
-            <div class="tariff-item" onclick="selectTariff(7, 46)">
-                <div class="tariff-info">
-                    <div class="tariff-period">7 дней</div>
-                </div>
-                <div class="tariff-price">49 ₽</div>
-            </div>
-            <div class="tariff-item" onclick="selectTariff(14, 92)">
-                <div class="tariff-info">
-                    <div class="tariff-period">14 дней</div>
-                </div>
-                <div class="tariff-price">99 ₽</div>
-            </div>
-            <div class="tariff-item" onclick="selectTariff(30, 199)">
-                <div class="tariff-info">
-                    <div class="tariff-period">1 месяц</div>
-                </div>
-                <div class="tariff-price">199 ₽</div>
-            </div>
-            <div class="tariff-item" onclick="selectTariff(90, 597)">
-                <div class="tariff-info">
-                    <div class="tariff-period">3 месяца</div>
-                </div>
-                <div class="tariff-price">599 ₽</div>
-            </div>
-        </div>
+        <!-- Help Tab -->
+        <div id="tab-help" class="tab-content">
+            <h2 style="margin-bottom: 20px;">❓ Помощь</h2>
 
-        <button class="btn btn-primary" onclick="topUpBalance()">
-            💳 Пополнить баланс
-        </button>
-        <button class="btn btn-secondary" onclick="openSupport()">
-            💬 Поддержка
-        </button>
+            <div class="server-card">
+                <h3 style="margin-bottom: 15px;">📱 Установка Happ</h3>
+                <div class="instruction-step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Скачайте Happ из AppStore или Google Play</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Откройте приложение</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Скопируйте конфиг из раздела "Серверы"</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">4</span>
+                    <span class="step-text">В Happ нажмите + → Import from clipboard</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">5</span>
+                    <span class="step-text">Нажмите кнопку подключения</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 20px 0;">❔ Частые вопросы</h3>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Как подключить VPN?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Скачайте приложение Happ, скопируйте конфиг из раздела "Серверы" и импортируйте его в приложении через + → Import from clipboard
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Сколько устройств можно подключить?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Вы можете подключить до 3 устройств одновременно на одном аккаунте.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Что делать если VPN не работает?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Попробуйте переключиться на другой сервер (Яндекс, Госуслуги или VK). Если проблема сохраняется, напишите в поддержку @vinivpnhelp
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Как продлить подписку?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Пополните баланс, затем выберите нужный тариф в разделе "Тарифы" или в боте.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Что такое автопродление?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    При включенном автопродлении подписка автоматически продлевается за счёт вашего баланса когда заканчивается срок действия.
+                </div>
+            </div>
+
+            <div class="server-card" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">📞 Контакты</h3>
+                <div style="line-height: 2.5;">
+                    <div>📰 Новости: <a href="https://t.me/vinivpnnews" style="color: #fff; text-decoration: underline;">@vinivpnnews</a></div>
+                    <div>🛠 Поддержка: <a href="https://t.me/vinivpnhelp" style="color: #fff; text-decoration: underline;">@vinivpnhelp</a></div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0;">🎟 Есть промокод?</h3>
+            <input type="text" class="promo-input" id="promo-code" placeholder="Введите промокод">
+            <button class="btn btn-success" onclick="activatePromo()">
+                ✅ Активировать
+            </button>
+        </div>
     </div>
 
     <script>
-        const API_URL = 'http://213.155.28.160:8080';
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        const userId = tg.initDataUnsafe?.user?.id || 'demo';
+        const API_URL = `http://213.155.28.160:8080/subscription/${userId}`;
         
-        let configs = {
-            'yandex': 'Загрузка...',
-            'gosuslugi': 'Загрузка...',
-            'vk': 'Загрузка...'
-        };
-        
-        let userData = {
-            balance: 0,
-            subscription: {
-                active: true,
-                days_left: 3,
-                is_trial: true
-            },
-            devices: 0
-        };
-        
-        async function loadConfigs() {
+        let userData = null;
+        let configs = {};
+
+        // Load user data
+        async function loadData() {
             try {
                 const response = await fetch(API_URL);
-                const data = await response.json();
-                configs = data.configs;
-                console.log('Конфиги загружены');
-            } catch (error) {
-                console.error('Ошибка загрузки конфигов:', error);
-            }
-        }
-        
-        function updateUI() {
-            document.getElementById('user-balance').textContent = `${userData.balance} ₽`;
-            
-            const subStatus = document.getElementById('subscription-status');
-            const trialIndicator = document.getElementById('trial-indicator');
-            const trialText = document.getElementById('trial-text');
-            
-            if (userData.subscription && userData.subscription.active) {
-                const daysLeft = userData.subscription.days_left;
+                if (!response.ok) throw new Error('Failed to fetch');
                 
+                userData = await response.json();
+                
+                // Update UI
+                document.getElementById('days-left').textContent = userData.subscription.days_left;
+                document.getElementById('balance').textContent = userData.balance + ' ₽';
+                document.getElementById('devices').textContent = '3';
+                document.getElementById('referrals').textContent = userData.referral_count || 0;
+
+                // Status badge
+                const badge = document.getElementById('status-badge');
                 if (userData.subscription.is_trial) {
-                    subStatus.textContent = `Пробный (${daysLeft} дн.)`;
-                    subStatus.className = 'status-badge status-trial';
-                    trialIndicator.classList.remove('hidden');
-                    trialText.textContent = `Пробный период: ${daysLeft} дней`;
+                    badge.textContent = '🎁 Пробный период';
+                    badge.className = 'status-badge status-trial';
+                } else if (userData.subscription.days_left > 0) {
+                    badge.textContent = '✅ Подписка активна';
+                    badge.className = 'status-badge status-active';
                 } else {
-                    subStatus.textContent = `Активна (${daysLeft} дн.)`;
-                    subStatus.className = 'status-badge status-active';
-                    trialIndicator.classList.add('hidden');
+                    badge.textContent = '⏰ Подписка истекла';
+                    badge.className = 'status-badge status-inactive';
                 }
-            } else {
-                subStatus.textContent = 'Неактивна';
-                subStatus.className = 'status-badge status-inactive';
-                trialIndicator.classList.add('hidden');
-            }
-            
-            document.getElementById('devices-count').textContent = `${userData.devices}/4`;
-        }
-        
-        loadConfigs();
-        
-        let tg = window.Telegram?.WebApp;
-        
-        if (!tg) {
-            console.error('Telegram WebApp не доступен');
-            document.getElementById('error-container').classList.remove('hidden');
-            document.getElementById('user-name').textContent = 'Откройте через бота';
-            updateUI();
-        } else {
-            tg.expand();
-            tg.ready();
 
-            const user = tg.initDataUnsafe?.user;
-            
-            if (user) {
-                document.getElementById('user-name').textContent = `Привет, ${user.first_name}!`;
-                document.getElementById('user-id').textContent = user.id;
-            } else {
-                document.getElementById('user-name').textContent = 'Гость';
-                document.getElementById('user-id').textContent = 'Неизвестно';
+                // Quick stats
+                document.getElementById('sub-status').textContent = userData.subscription.days_left + ' дней';
+                document.getElementById('auto-renew').textContent = userData.subscription.auto_renew ? 'Включено' : 'Выключено';
+                document.getElementById('balance-info').textContent = userData.balance + ' ₽';
+                document.getElementById('ref-count').textContent = userData.referral_count || 0;
+
+                // Referral
+                const botUsername = 'vinivpnbot'; // Замените на имя бота
+                const refLink = `https://t.me/${botUsername}?start=ref_${userId}`;
+                document.getElementById('ref-link').textContent = refLink;
+                document.getElementById('ref-total').textContent = userData.referral_count || 0;
+                document.getElementById('ref-earnings').textContent = (userData.referral_count || 0) * 100 + ' ₽';
+
+                // Configs
+                if (userData.configs && userData.configs.length > 0) {
+                    userData.configs.forEach(config => {
+                        if (config.inbound_name.includes('LTE') || config.inbound_name.includes('Yandex')) {
+                            configs.yandex = config.config_url;
+                            document.getElementById('config-yandex').textContent = config.config_url;
+                        } else if (config.inbound_name.includes('Gosuslugi')) {
+                            configs.gosuslugi = config.config_url;
+                            document.getElementById('config-gosuslugi').textContent = config.config_url;
+                        } else if (config.inbound_name.includes('VK')) {
+                            configs.vk = config.config_url;
+                            document.getElementById('config-vk').textContent = config.config_url;
+                        }
+                    });
+                }
+
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('tab-main').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = '<p>❌ Ошибка загрузки данных</p><button class="btn btn-primary" onclick="location.reload()">Обновить</button>';
             }
-            
-            updateUI();
         }
 
+        // Switch tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        // Copy config
         function copyConfig(server) {
             const config = configs[server];
-            
-            if (!config || config === 'Загрузка...') {
-                if (tg) {
-                    tg.showAlert('⚠️ Конфигурация загружается...');
-                } else {
-                    alert('⚠️ Конфигурация загружается...');
-                }
+            if (!config) {
+                tg.showAlert('Конфиг не найден. Откройте бота для создания конфигов.');
                 return;
             }
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(config).then(() => {
-                    if (tg) {
-                        tg.showAlert('✅ Конфигурация скопирована!\n\nВставьте в приложение Happ.');
-                    } else {
-                        alert('✅ Скопировано!');
-                    }
-                }).catch(() => {
-                    if (tg) {
-                        tg.showAlert(`${config}`);
-                    } else {
-                        alert(config);
-                    }
-                });
-            } else {
-                if (tg) {
-                    tg.showAlert(`${config}`);
-                } else {
-                    alert(config);
-                }
-            }
-        }
 
-        function selectTariff(days, price) {
-            if (!tg) {
-                alert(`Подписка ${days} дней - ${price} ₽`);
-                return;
-            }
-            
-            tg.showConfirm(`Активировать подписку на ${days} дней за ${price} ₽?`, (confirmed) => {
-                if (confirmed) {
-                    if (userData.balance < price) {
-                        tg.showAlert('⚠️ Недостаточно средств на балансе.\n\nПополните баланс.');
-                    } else {
-                        tg.showAlert('✅ Подписка активирована!\n\n(Демо - нужен API)');
-                    }
-                }
+            navigator.clipboard.writeText(config).then(() => {
+                tg.showPopup({
+                    title: '✅ Скопировано!',
+                    message: 'Конфиг скопирован в буфер обмена. Откройте Happ и импортируйте его.',
+                    buttons: [{type: 'ok'}]
+                });
             });
         }
 
-        function topUpBalance() {
-            if (!tg) {
-                alert('Доступно только в Telegram');
+        // Copy ref link
+        function copyRefLink() {
+            const link = document.getElementById('ref-link').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                tg.showPopup({
+                    title: '✅ Скопировано!',
+                    message: 'Реферальная ссылка скопирована',
+                    buttons: [{type: 'ok'}]
+                });
+            });
+        }
+
+        // Share ref link
+        function shareRefLink() {
+            const link = document.getElementById('ref-link').textContent;
+            const text = 'Попробуй этот VPN! Получишь 50₽ бонус при регистрации 🎁';
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+        }
+
+        // Open bot
+        function openBot() {
+            tg.close();
+        }
+
+        // Toggle FAQ
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        // Activate promo
+        function activatePromo() {
+            const code = document.getElementById('promo-code').value.trim();
+            if (!code) {
+                tg.showAlert('Введите промокод');
                 return;
             }
-            
+
             tg.showPopup({
-                title: '💳 Пополнение баланса',
-                message: 'Выберите сумму:',
+                title: '🎟 Активация промокода',
+                message: `Откройте бота и введите команду:\n/promo ${code}`,
                 buttons: [
-                    {id: '100', type: 'default', text: '100 ₽'},
-                    {id: '300', type: 'default', text: '300 ₽'},
-                    {id: '500', type: 'default', text: '500 ₽'},
+                    {id: 'open', type: 'default', text: 'Открыть бота'},
                     {type: 'cancel'}
                 ]
             }, (buttonId) => {
-                if (buttonId && buttonId !== 'cancel') {
-                    tg.showAlert(`Переход к оплате ${buttonId} ₽...\n\n(ЮKassa в разработке)`);
+                if (buttonId === 'open') {
+                    tg.close();
                 }
             });
         }
 
-        function openSupport() {
-            if (!tg) {
-                alert('Доступно только в Telegram');
-                return;
-            }
-            tg.openTelegramLink('https://t.me/vinivpnhelp');
-        }
+        // Initialize
+        loadData();
     </script>
 </body>
 </html>
