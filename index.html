@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VINI VPN</title>
+    <title>🧸 VINI VPN</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a4d2e 0%, #2d5f3f 100%);
             color: #fff;
             overflow-x: hidden;
             padding-bottom: 80px;
@@ -34,12 +34,17 @@
             border-radius: 20px;
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
         }
 
         .header h1 {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #4ade80 0%, #ff9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header .subtitle {
@@ -56,12 +61,18 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(255, 152, 0, 0.5);
+            transform: translateY(-5px);
         }
 
         .stat-card .icon {
@@ -73,6 +84,7 @@
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 5px;
+            color: #4ade80;
         }
 
         .stat-card .label {
@@ -91,11 +103,13 @@
         }
 
         .status-active {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+            box-shadow: 0 5px 20px rgba(34, 197, 94, 0.4);
         }
 
         .status-trial {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
+            box-shadow: 0 5px 20px rgba(251, 146, 60, 0.4);
         }
 
         .status-inactive {
@@ -124,27 +138,31 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
             color: white;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.5);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #15803d 0%, #4ade80 100%);
             color: white;
-            box-shadow: 0 10px 30px rgba(56, 239, 125, 0.4);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.4);
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
             color: white;
-            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 10px 30px rgba(251, 146, 60, 0.4);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(74, 222, 128, 0.3);
         }
 
         /* Tabs */
@@ -155,6 +173,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 5px;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .tab {
@@ -170,8 +189,9 @@
         }
 
         .tab.active {
-            background: rgba(255, 255, 255, 0.25);
+            background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
             color: white;
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
         }
 
         /* Tab Content */
@@ -185,12 +205,12 @@
 
         /* Server Card */
         .server-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .server-header {
@@ -209,7 +229,8 @@
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 12px;
-            background: rgba(56, 239, 125, 0.3);
+            background: rgba(34, 197, 94, 0.3);
+            border: 1px solid rgba(34, 197, 94, 0.5);
         }
 
         .config-box {
@@ -221,27 +242,30 @@
             word-break: break-all;
             margin-bottom: 10px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .config-box:hover {
             background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 152, 0, 0.5);
         }
 
         /* Tariff Card */
         .tariff-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(74, 222, 128, 0.2);
             transition: all 0.3s;
         }
 
         .tariff-card:hover {
-            border-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 152, 0, 0.6);
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.3);
         }
 
         .tariff-header {
@@ -259,6 +283,7 @@
         .tariff-price {
             font-size: 24px;
             font-weight: 700;
+            color: #fb923c;
         }
 
         .tariff-features {
@@ -277,11 +302,12 @@
 
         /* Referral */
         .ref-box {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .ref-link {
@@ -292,6 +318,12 @@
             font-size: 14px;
             margin-bottom: 15px;
             cursor: pointer;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            transition: all 0.2s;
+        }
+
+        .ref-link:hover {
+            border-color: rgba(255, 152, 0, 0.5);
         }
 
         .ref-stats {
@@ -308,6 +340,7 @@
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 5px;
+            color: #4ade80;
         }
 
         .ref-stat .label {
@@ -323,7 +356,7 @@
 
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
+            border-top: 4px solid #4ade80;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -342,12 +375,13 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(26, 77, 46, 0.95);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(74, 222, 128, 0.2);
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
+            z-index: 1000;
         }
 
         .nav-item {
@@ -372,18 +406,19 @@
 
         /* Instructions */
         .instruction-step {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .instruction-step .step-number {
             display: inline-block;
             width: 30px;
             height: 30px;
-            background: rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
             border-radius: 50%;
             text-align: center;
             line-height: 30px;
@@ -398,12 +433,18 @@
 
         /* FAQ */
         .faq-item {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
             cursor: pointer;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(255, 152, 0, 0.5);
         }
 
         .faq-question {
@@ -427,26 +468,45 @@
 
         .faq-item.open .faq-icon {
             transform: rotate(180deg);
+            color: #fb923c;
         }
 
         .faq-icon {
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            color: #4ade80;
         }
 
         /* Promo Input */
         .promo-input {
             width: 100%;
             padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(74, 222, 128, 0.3);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 16px;
             margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .promo-input:focus {
+            outline: none;
+            border-color: rgba(255, 152, 0, 0.6);
         }
 
         .promo-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Highlight borders */
+        .tariff-card.popular {
+            border-color: #fb923c;
+            box-shadow: 0 5px 20px rgba(251, 146, 60, 0.3);
+        }
+
+        .tariff-card.best-value {
+            border-color: #4ade80;
+            box-shadow: 0 5px 20px rgba(74, 222, 128, 0.3);
         }
     </style>
 </head>
@@ -523,10 +583,10 @@
             <div class="server-card">
                 <h3 style="margin-bottom: 15px;">📊 Быстрая информация</h3>
                 <div style="line-height: 2;">
-                    <div>✅ Подписка: <strong id="sub-status">—</strong></div>
-                    <div>♻️ Автопродление: <strong id="auto-renew">—</strong></div>
-                    <div>💰 Баланс: <strong id="balance-info">—</strong></div>
-                    <div>👥 Ваших рефералов: <strong id="ref-count">—</strong></div>
+                    <div>✅ Подписка: <strong id="sub-status" style="color: #4ade80;">—</strong></div>
+                    <div>♻️ Автопродление: <strong id="auto-renew" style="color: #fb923c;">—</strong></div>
+                    <div>💰 Баланс: <strong id="balance-info" style="color: #4ade80;">—</strong></div>
+                    <div>👥 Ваших рефералов: <strong id="ref-count" style="color: #fb923c;">—</strong></div>
                 </div>
             </div>
         </div>
@@ -621,7 +681,7 @@
                 <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
 
-            <div class="tariff-card" style="border-color: #ffd700;">
+            <div class="tariff-card popular">
                 <div class="tariff-header">
                     <div class="tariff-name">1 месяц ⭐</div>
                     <div class="tariff-price">199 ₽</div>
@@ -632,7 +692,7 @@
                     <li>✅ Безлимит</li>
                     <li>⭐ Популярный</li>
                 </ul>
-                <button class="btn btn-success" onclick="openBot()">Купить</button>
+                <button class="btn btn-warning" onclick="openBot()">Купить</button>
             </div>
 
             <div class="tariff-card">
@@ -649,7 +709,7 @@
                 <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
 
-            <div class="tariff-card">
+            <div class="tariff-card best-value">
                 <div class="tariff-header">
                     <div class="tariff-name">1 год 🔥</div>
                     <div class="tariff-price">2399 ₽</div>
@@ -660,7 +720,7 @@
                     <li>✅ Безлимит</li>
                     <li>🔥 Максимальная выгода</li>
                 </ul>
-                <button class="btn btn-warning" onclick="openBot()">Купить</button>
+                <button class="btn btn-success" onclick="openBot()">Купить</button>
             </div>
         </div>
 
@@ -671,8 +731,8 @@
             <div class="ref-box">
                 <h3 style="margin-bottom: 15px;">🎁 Ваши награды:</h3>
                 <div style="line-height: 2; margin-bottom: 20px;">
-                    <div>• Вы получаете: <strong>100 ₽</strong></div>
-                    <div>• Ваш друг получает: <strong>50 ₽</strong></div>
+                    <div>• Вы получаете: <strong style="color: #4ade80;">100 ₽</strong></div>
+                    <div>• Ваш друг получает: <strong style="color: #fb923c;">50 ₽</strong></div>
                 </div>
 
                 <h3 style="margin-bottom: 10px;">🔗 Ваша ссылка:</h3>
@@ -797,8 +857,8 @@
             <div class="server-card" style="margin-top: 30px;">
                 <h3 style="margin-bottom: 15px;">📞 Контакты</h3>
                 <div style="line-height: 2.5;">
-                    <div>📰 Новости: <a href="https://t.me/vinivpnnews" style="color: #fff; text-decoration: underline;">@vinivpnnews</a></div>
-                    <div>🛠 Поддержка: <a href="https://t.me/vinivpnhelp" style="color: #fff; text-decoration: underline;">@vinivpnhelp</a></div>
+                    <div>📰 Новости: <a href="https://t.me/vinivpnnews" style="color: #4ade80; text-decoration: underline;">@vinivpnnews</a></div>
+                    <div>🛠 Поддержка: <a href="https://t.me/vinivpnhelp" style="color: #fb923c; text-decoration: underline;">@vinivpnhelp</a></div>
                 </div>
             </div>
 
@@ -855,7 +915,7 @@
                 document.getElementById('ref-count').textContent = userData.referral_count || 0;
 
                 // Referral
-                const botUsername = 'vinivpnbot';
+                const botUsername = 'vinivpnbot'; // Замените на имя бота
                 const refLink = `https://t.me/${botUsername}?start=ref_${userId}`;
                 document.getElementById('ref-link').textContent = refLink;
                 document.getElementById('ref-total').textContent = userData.referral_count || 0;
