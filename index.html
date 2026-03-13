@@ -594,6 +594,23 @@
         <!-- Servers Tab -->
         <div id="tab-servers" class="tab-content">
             <h2 style="margin-bottom: 20px;">🌍 Выберите сервер</h2>
+
+            <div class="server-card" style="border: 2px solid #fb923c; background: rgba(251, 146, 60, 0.1);">
+                <div class="server-header">
+                    <div class="server-name">⚡️ Все серверы сразу</div>
+                    <div class="server-status" style="background: rgba(251, 146, 60, 0.3);">🔥 Рекомендуем</div>
+                </div>
+                <p style="opacity: 0.9; margin-bottom: 15px;">Subscription URL - добавьте все 3 сервера одной ссылкой!</p>
+                <div class="config-box" id="subscription-url" onclick="copySubUrl()">
+                    https://vinivpnbot.duckdns.org:9443/sub/demo
+                </div>
+                <button class="btn btn-warning" onclick="copySubUrl()">
+                    ⚡️ Скопировать Subscription URL
+                </button>
+                <div style="font-size: 12px; opacity: 0.7; margin-top: 10px; line-height: 1.5;">
+                    💡 В Happ: + → Import from URL → вставьте эту ссылку
+                </div>
+            </div>
             
             <div class="server-card">
                 <div class="server-header">
@@ -937,6 +954,8 @@
                     });
                 }
 
+                document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('tab-main').style.display = 'block';
@@ -970,6 +989,19 @@
                 tg.showPopup({
                     title: '✅ Скопировано!',
                     message: 'Конфиг скопирован в буфер обмена. Откройте Happ и импортируйте его.',
+                    buttons: [{type: 'ok'}]
+                });
+            });
+        }
+
+        // Copy subscription URL
+        function copySubUrl() {
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            
+            navigator.clipboard.writeText(subUrl).then(() => {
+                tg.showPopup({
+                    title: '✅ Скопировано!',
+                    message: 'Subscription URL скопирован!\n\nВ Happ:\n+ → Import from URL → вставьте ссылку\n\nВсе 3 сервера добавятся сразу!',
                     buttons: [{type: 'ok'}]
                 });
             });
