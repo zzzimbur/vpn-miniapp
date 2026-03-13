@@ -952,7 +952,7 @@
                 document.getElementById('ref-earnings').textContent = (userData.referral_count || 0) * 100 + ' ₽';
         
                 // Subscription URL
-                document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+                document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}#🧸 ViniVPN`;
         
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
@@ -998,7 +998,7 @@
 
         // Copy subscription URL
         function copySubUrl() {
-            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}#🧸 ViniVPN`;
             
             navigator.clipboard.writeText(subUrl).then(() => {
                 tg.showPopup({
