@@ -593,78 +593,56 @@
 
         <!-- Servers Tab -->
         <div id="tab-servers" class="tab-content">
-            <h2 style="margin-bottom: 20px;">🌍 Выберите сервер</h2>
-
-            <div class="server-card" style="border: 2px solid #fb923c; background: rgba(251, 146, 60, 0.1);">
+            <h2 style="margin-bottom: 20px;">📱 Подключение VPN</h2>
+            
+            <div class="server-card" style="border: 2px solid #4ade80; background: rgba(74, 222, 128, 0.1);">
                 <div class="server-header">
-                    <div class="server-name">⚡️ Все серверы сразу</div>
-                    <div class="server-status" style="background: rgba(251, 146, 60, 0.3);">🔥 Рекомендуем</div>
+                    <div class="server-name">⚡️ Subscription URL</div>
+                    <div class="server-status" style="background: rgba(74, 222, 128, 0.3);">🔥 Все серверы</div>
                 </div>
-                <p style="opacity: 0.9; margin-bottom: 15px;">Subscription URL - добавьте все 3 сервера одной ссылкой!</p>
+                <p style="opacity: 0.9; margin-bottom: 15px;">
+                    Одна ссылка для всех 3 серверов:<br>
+                    🇳🇱 Яндекс • Госуслуги • VK
+                </p>
                 <div class="config-box" id="subscription-url" onclick="copySubUrl()">
                     https://vinivpnbot.duckdns.org:9443/sub/demo
                 </div>
-                <button class="btn btn-warning" onclick="copySubUrl()">
-                    ⚡️ Скопировать Subscription URL
+                <button class="btn btn-success" onclick="copySubUrl()">
+                    📋 Скопировать ссылку
                 </button>
-                <div style="font-size: 12px; opacity: 0.7; margin-top: 10px; line-height: 1.5;">
-                    💡 В Happ: + → Import from URL → вставьте эту ссылку
-                </div>
             </div>
-            
+        
             <div class="server-card">
-                <div class="server-header">
-                    <div class="server-name">🇳🇱 Яндекс (рекомендуем)</div>
-                    <div class="server-status">✅ Онлайн</div>
+                <h3 style="margin-bottom: 15px;">📖 Инструкция по подключению</h3>
+                <div class="instruction-step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Скопируйте URL выше</span>
                 </div>
-                <p style="opacity: 0.8; margin-bottom: 15px;">Оптимизирован для Яндекс сервисов</p>
-                <div class="config-box" id="config-yandex" onclick="copyConfig('yandex')">
-                    Нажмите для копирования конфига...
+                <div class="instruction-step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Откройте приложение Happ</span>
                 </div>
-                <button class="btn btn-primary" onclick="copyConfig('yandex')">
-                    📋 Скопировать конфиг
-                </button>
+                <div class="instruction-step">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Нажмите + → Import from URL</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">4</span>
+                    <span class="step-text">Вставьте скопированную ссылку</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-number">5</span>
+                    <span class="step-text">Все сервера добавятся автоматически!</span>
+                </div>
             </div>
-
-            <div class="server-card">
-                <div class="server-header">
-                    <div class="server-name">🇳🇱 Госуслуги</div>
-                    <div class="server-status">✅ Онлайн</div>
+        
+            <div class="server-card" style="background: rgba(251, 146, 60, 0.1); border-color: rgba(251, 146, 60, 0.3);">
+                <h3 style="margin-bottom: 15px; color: #fb923c;">💡 Преимущества</h3>
+                <div style="line-height: 2;">
+                    <div>✅ Автоматическое обновление конфигов</div>
+                    <div>✅ Все серверы в одной ссылке</div>
+                    <div>✅ Легко переключаться между серверами</div>
                 </div>
-                <p style="opacity: 0.8; margin-bottom: 15px;">Для госуслуг и государственных сайтов</p>
-                <div class="config-box" id="config-gosuslugi" onclick="copyConfig('gosuslugi')">
-                    Нажмите для копирования конфига...
-                </div>
-                <button class="btn btn-primary" onclick="copyConfig('gosuslugi')">
-                    📋 Скопировать конфиг
-                </button>
-            </div>
-
-            <div class="server-card">
-                <div class="server-header">
-                    <div class="server-name">🇳🇱 VK</div>
-                    <div class="server-status">✅ Онлайн</div>
-                </div>
-                <p style="opacity: 0.8; margin-bottom: 15px;">Оптимизирован для VK и социальных сетей</p>
-                <div class="config-box" id="config-vk" onclick="copyConfig('vk')">
-                    Нажмите для копирования конфига...
-                </div>
-                <button class="btn btn-primary" onclick="copyConfig('vk')">
-                    📋 Скопировать конфиг
-                </button>
-            </div>
-
-            <div class="instruction-step">
-                <span class="step-number">1</span>
-                <span class="step-text">Скопируйте конфиг нажав на него</span>
-            </div>
-            <div class="instruction-step">
-                <span class="step-number">2</span>
-                <span class="step-text">Откройте приложение Happ</span>
-            </div>
-            <div class="instruction-step">
-                <span class="step-number">3</span>
-                <span class="step-text">Нажмите + → Import from clipboard</span>
             </div>
         </div>
 
@@ -1001,7 +979,7 @@
             navigator.clipboard.writeText(subUrl).then(() => {
                 tg.showPopup({
                     title: '✅ Скопировано!',
-                    message: 'Subscription URL скопирован!\n\nВ Happ:\n+ → Import from URL → вставьте ссылку\n\nВсе 3 сервера добавятся сразу!',
+                    message: 'Subscription URL скопирован в буфер обмена!\n\nОткройте Happ и импортируйте ссылку.',
                     buttons: [{type: 'ok'}]
                 });
             });
