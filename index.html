@@ -870,7 +870,7 @@
         tg.expand();
         tg.ready();
 
-        const userId = tg.initDataUnsafe?.user?.id || 'demo';
+        const userId = tg.initDataUnsafe?.user?.id || null;
         const API_URL = `https://vinivpnbot.duckdns.org:9443/subscription/${userId}`;
         
         let userData = null;
@@ -879,17 +879,52 @@
         // Load user data
         async function loadData() {
             try {
+                // Проверка userId
+                if (!userId) {
+                    // Demo режим для браузера
+                    document.getElementById('days-left').textContent = '30';
+                    document.getElementById('balance').textContent = '100 ₽';
+                    document.getElementById('devices').textContent = '3';
+                    document.getElementById('referrals').textContent = '0';
+                    
+                    const badge = document.getElementById('status-badge');
+                    badge.textContent = '✅ Demo режим';
+                    badge.className = 'status-badge status-active';
+                    
+                    document.getElementById('sub-status').textContent = '30 дней';
+                    document.getElementById('auto-renew').textContent = 'Выключено';
+                    document.getElementById('balance-info').textContent = '100 ₽';
+                    document.getElementById('ref-count').textContent = '0';
+                    
+                    const demoSubUrl = 'https://vinivpnbot.duckdns.org:9443/sub/YOUR_USER_ID';
+                    document.getElementById('subscription-url').textContent = demoSubUrl;
+                    document.getElementById('ref-link').textContent = 'https://t.me/YOUR_BOT?start=ref_YOUR_USER_ID';
+                    document.getElementById('ref-total').textContent = '0';
+                    document.getElementById('ref-earnings').textContent = '0 ₽';
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('tab-main').style.display = 'block';
+                    return;
+                }
+                
+                console.log('Fetching data from:', API_URL);
+                
                 const response = await fetch(API_URL);
-                if (!response.ok) throw new Error('Failed to fetch');
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 userData = await response.json();
+                console.log('User data:', userData);
                 
                 // Update UI
                 document.getElementById('days-left').textContent = userData.subscription.days_left;
                 document.getElementById('balance').textContent = userData.balance + ' ₽';
                 document.getElementById('devices').textContent = '3';
                 document.getElementById('referrals').textContent = userData.referral_count || 0;
-
+        
                 // Status badge
                 const badge = document.getElementById('status-badge');
                 if (userData.subscription.is_trial) {
@@ -902,45 +937,34 @@
                     badge.textContent = '⏰ Подписка истекла';
                     badge.className = 'status-badge status-inactive';
                 }
-
+        
                 // Quick stats
                 document.getElementById('sub-status').textContent = userData.subscription.days_left + ' дней';
                 document.getElementById('auto-renew').textContent = userData.subscription.auto_renew ? 'Включено' : 'Выключено';
                 document.getElementById('balance-info').textContent = userData.balance + ' ₽';
                 document.getElementById('ref-count').textContent = userData.referral_count || 0;
-
+        
                 // Referral
-                const botUsername = 'vinivpnbot'; // Замените на имя бота
+                const botUsername = 'vinivpnbot';
                 const refLink = `https://t.me/${botUsername}?start=ref_${userId}`;
                 document.getElementById('ref-link').textContent = refLink;
                 document.getElementById('ref-total').textContent = userData.referral_count || 0;
                 document.getElementById('ref-earnings').textContent = (userData.referral_count || 0) * 100 + ' ₽';
-
-                // Configs
-                if (userData.configs && userData.configs.length > 0) {
-                    userData.configs.forEach(config => {
-                        if (config.inbound_name.includes('LTE') || config.inbound_name.includes('Yandex')) {
-                            configs.yandex = config.config_url;
-                            document.getElementById('config-yandex').textContent = config.config_url;
-                        } else if (config.inbound_name.includes('Gosuslugi')) {
-                            configs.gosuslugi = config.config_url;
-                            document.getElementById('config-gosuslugi').textContent = config.config_url;
-                        } else if (config.inbound_name.includes('VK')) {
-                            configs.vk = config.config_url;
-                            document.getElementById('config-vk').textContent = config.config_url;
-                        }
-                    });
-                }
-
+        
+                // Subscription URL
                 document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
-
+        
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('tab-main').style.display = 'block';
-
+        
             } catch (error) {
                 console.error('Error loading data:', error);
-                document.getElementById('loading').innerHTML = '<p>❌ Ошибка загрузки данных</p><button class="btn btn-primary" onclick="location.reload()">Обновить</button>';
+                document.getElementById('loading').innerHTML = 
+                    '<p>❌ Ошибка загрузки данных</p>' +
+                    '<p style="font-size: 12px; opacity: 0.7;">' + error.message + '</p>' +
+                    '<p style="font-size: 12px; opacity: 0.7;">Откройте через Telegram бота</p>' +
+                    '<button class="btn btn-primary" onclick="location.reload()">Обновить</button>';
             }
         }
 
