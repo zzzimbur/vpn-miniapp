@@ -898,20 +898,19 @@
         // Open in Happ
         function openInHapp() {
             const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
-            const happLink = `happ://install-config?url=${encodeURIComponent(subUrl)}`;
             
-            registerDevice();
-            window.location.href = happLink;
-            
-            setTimeout(() => {
-                navigator.clipboard.writeText(subUrl).then(() => {
-                    tg.showPopup({
-                        title: '📱 Открываем Happ',
-                        message: 'Если приложение не открылось:\n\n1. Установите Happ\n2. Ссылка скопирована - вставьте в Happ',
-                        buttons: [{type: 'ok'}]
-                    });
+            // Copy to clipboard
+            navigator.clipboard.writeText(subUrl).then(() => {
+                registerDevice();
+                
+                tg.showPopup({
+                    title: '📱 Подключение',
+                    message: '✅ Ссылка скопирована!\n\n📖 Инструкция:\n1. Откройте Happ\n2. Нажмите + → Import from URL\n3. Вставьте ссылку (уже в буфере)\n4. Готово! Все 3 сервера добавятся\n\n💡 Ваше устройство автоматически зарегистрировано!',
+                    buttons: [{type: 'ok'}]
                 });
-            }, 1000);
+            }).catch(() => {
+                tg.showAlert('Ошибка копирования. Скопируйте ссылку вручную из раздела "Ручное подключение"');
+            });
         }
 
         // Copy subscription URL
