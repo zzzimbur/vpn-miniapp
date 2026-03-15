@@ -847,7 +847,8 @@
                 document.getElementById('ref-earnings').textContent = (userData.referral_count || 0) * 100 + ' ₽';
         
                 // Subscription URL
-                document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+                document.getElementById('subscription-url').textContent = `https://vinivpnbot.duckdns.org:9443/sub/${userId}#🧸 ViniVPN`;
+
         
                 // Shop data
                 const traffic = userData.traffic || {limit: 100, used: 0, remaining: 100};
@@ -897,7 +898,7 @@
 
         // Open in Happ
         function openInHapp() {
-            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}#🧸 ViniVPN`;
             
             registerDevice();
             
@@ -929,7 +930,7 @@
 
         // Copy subscription URL
         function copySubUrl() {
-            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}#🧸 ViniVPN`;
             navigator.clipboard.writeText(subUrl).then(() => {
                 tg.showPopup({
                     title: '✅ Скопировано!',
