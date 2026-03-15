@@ -899,17 +899,31 @@
         function openInHapp() {
             const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
             
-            // Copy to clipboard
-            navigator.clipboard.writeText(subUrl).then(() => {
-                registerDevice();
-                
-                tg.showPopup({
-                    title: '📱 Подключение',
-                    message: '✅ Ссылка скопирована!\n\n📖 Инструкция:\n1. Откройте Happ\n2. Нажмите + → Import from URL\n3. Вставьте ссылку (уже в буфере)\n4. Готово! Все 3 сервера добавятся\n\n💡 Ваше устройство автоматически зарегистрировано!',
-                    buttons: [{type: 'ok'}]
+            registerDevice();
+            
+            // Try to copy first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(subUrl).then(() => {
+                    tg.showPopup({
+                        title: '📱 Подключение к Happ',
+                        message: '✅ Ссылка скопирована!\n\n📖 Инструкция:\n1. Откройте Happ\n2. Нажмите +\n3. Import from URL\n4. Вставьте ссылку\n\nВсе 3 сервера добавятся автоматически!',
+                        buttons: [{type: 'ok'}]
+                    });
+                }).catch(err => {
+                    console.error('Clipboard error:', err);
+                    showManualCopy();
                 });
-            }).catch(() => {
-                tg.showAlert('Ошибка копирования. Скопируйте ссылку вручную из раздела "Ручное подключение"');
+            } else {
+                showManualCopy();
+            }
+        }
+        
+        function showManualCopy() {
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            tg.showPopup({
+                title: '📱 Ваша ссылка для Happ',
+                message: subUrl + '\n\nСкопируйте эту ссылку и вставьте в Happ (+ → Import from URL)',
+                buttons: [{type: 'ok'}]
             });
         }
 
