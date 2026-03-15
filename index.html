@@ -563,22 +563,6 @@
 
         <!-- Main Tab -->
         <div id="tab-main" class="tab-content active" style="display: none;">
-            <button class="btn btn-success" onclick="openBot()">
-                <span>📱</span> Открыть бота
-            </button>
-
-            <button class="btn btn-primary" onclick="switchTab('servers')">
-                <span>🌍</span> Получить конфиг
-            </button>
-
-            <button class="btn btn-warning" onclick="switchTab('tariffs')">
-                <span>💎</span> Продлить подписку
-            </button>
-
-            <button class="btn btn-secondary" onclick="switchTab('help')">
-                <span>❓</span> Помощь и инструкции
-            </button>
-
             <!-- Quick Stats -->
             <div class="server-card">
                 <h3 style="margin-bottom: 15px;">📊 Быстрая информация</h3>
@@ -593,55 +577,50 @@
 
         <!-- Servers Tab -->
         <div id="tab-servers" class="tab-content">
-            <h2 style="margin-bottom: 20px;">📱 Подключение VPN</h2>
+            <h2 style="margin-bottom: 20px;">🌍 Подключение</h2>
             
             <div class="server-card" style="border: 2px solid #4ade80; background: rgba(74, 222, 128, 0.1);">
                 <div class="server-header">
-                    <div class="server-name">⚡️ Subscription URL</div>
-                    <div class="server-status" style="background: rgba(74, 222, 128, 0.3);">🔥 Все серверы</div>
+                    <div class="server-name">⚡️ Быстрое подключение</div>
+                    <div class="server-status" style="background: rgba(74, 222, 128, 0.3);">🔥 Рекомендуем</div>
                 </div>
                 <p style="opacity: 0.9; margin-bottom: 15px;">
-                    Одна ссылка для всех 3 серверов:<br>
+                    Подключите все 3 сервера одним нажатием!<br>
                     🇳🇱 Яндекс • Госуслуги • VK
+                </p>
+                <button class="btn btn-success" onclick="openInHapp()" style="font-size: 16px; padding: 15px;">
+                    📱 Подключиться в Happ
+                </button>
+            </div>
+        
+            <div class="server-card" style="background: rgba(251, 146, 60, 0.05); border-color: rgba(251, 146, 60, 0.2);">
+                <h3 style="margin-bottom: 15px;">📋 Ручное подключение</h3>
+                <p style="opacity: 0.8; margin-bottom: 15px; font-size: 14px;">
+                    Если автоматическое подключение не сработало, скопируйте ссылку вручную:
                 </p>
                 <div class="config-box" id="subscription-url" onclick="copySubUrl()">
                     https://vinivpnbot.duckdns.org:9443/sub/demo
                 </div>
-                <button class="btn btn-success" onclick="copySubUrl()">
+                <button class="btn" onclick="copySubUrl()" style="margin-top: 10px;">
                     📋 Скопировать ссылку
                 </button>
+                <div style="font-size: 12px; opacity: 0.7; margin-top: 15px; line-height: 1.6;">
+                    <b>Инструкция:</b><br>
+                    1. Откройте приложение Happ<br>
+                    2. Нажмите + → Import from URL<br>
+                    3. Вставьте скопированную ссылку
+                </div>
             </div>
         
             <div class="server-card">
-                <h3 style="margin-bottom: 15px;">📖 Инструкция по подключению</h3>
-                <div class="instruction-step">
-                    <span class="step-number">1</span>
-                    <span class="step-text">Скопируйте URL выше</span>
-                </div>
-                <div class="instruction-step">
-                    <span class="step-number">2</span>
-                    <span class="step-text">Откройте приложение Happ</span>
-                </div>
-                <div class="instruction-step">
-                    <span class="step-number">3</span>
-                    <span class="step-text">Нажмите + → Import from URL</span>
-                </div>
-                <div class="instruction-step">
-                    <span class="step-number">4</span>
-                    <span class="step-text">Вставьте скопированную ссылку</span>
-                </div>
-                <div class="instruction-step">
-                    <span class="step-number">5</span>
-                    <span class="step-text">Все сервера добавятся автоматически!</span>
-                </div>
-            </div>
-        
-            <div class="server-card" style="background: rgba(251, 146, 60, 0.1); border-color: rgba(251, 146, 60, 0.3);">
-                <h3 style="margin-bottom: 15px; color: #fb923c;">💡 Преимущества</h3>
+                <h3 style="margin-bottom: 15px;">💡 О серверах</h3>
                 <div style="line-height: 2;">
-                    <div>✅ Автоматическое обновление конфигов</div>
-                    <div>✅ Все серверы в одной ссылке</div>
-                    <div>✅ Легко переключаться между серверами</div>
+                    <div>🇳🇱 <b>Яндекс</b> - Быстрый, стабильный</div>
+                    <div>🇳🇱 <b>Госуслуги</b> - Для государственных сайтов</div>
+                    <div>🇳🇱 <b>VK</b> - Для социальных сетей</div>
+                </div>
+                <div style="margin-top: 15px; padding: 10px; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 13px;">
+                    💡 <b>Совет:</b> Happ автоматически выберет лучший сервер для вас!
                 </div>
             </div>
         </div>
@@ -655,11 +634,6 @@
                     <div class="tariff-name">7 дней</div>
                     <div class="tariff-price">49 ₽</div>
                 </div>
-                <ul class="tariff-features">
-                    <li>✅ 3 устройства</li>
-                    <li>✅ Все серверы</li>
-                    <li>✅ Безлимит</li>
-                </ul>
                 <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
 
@@ -668,11 +642,6 @@
                     <div class="tariff-name">14 дней</div>
                     <div class="tariff-price">99 ₽</div>
                 </div>
-                <ul class="tariff-features">
-                    <li>✅ 3 устройства</li>
-                    <li>✅ Все серверы</li>
-                    <li>✅ Безлимит</li>
-                </ul>
                 <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
 
@@ -681,12 +650,6 @@
                     <div class="tariff-name">1 месяц ⭐</div>
                     <div class="tariff-price">199 ₽</div>
                 </div>
-                <ul class="tariff-features">
-                    <li>✅ 3 устройства</li>
-                    <li>✅ Все серверы</li>
-                    <li>✅ Безлимит</li>
-                    <li>⭐ Популярный</li>
-                </ul>
                 <button class="btn btn-warning" onclick="openBot()">Купить</button>
             </div>
 
@@ -695,12 +658,6 @@
                     <div class="tariff-name">3 месяца</div>
                     <div class="tariff-price">599 ₽</div>
                 </div>
-                <ul class="tariff-features">
-                    <li>✅ 3 устройства</li>
-                    <li>✅ Все серверы</li>
-                    <li>✅ Безлимит</li>
-                    <li>💰 Выгодно</li>
-                </ul>
                 <button class="btn btn-primary" onclick="openBot()">Купить</button>
             </div>
 
@@ -709,12 +666,6 @@
                     <div class="tariff-name">1 год 🔥</div>
                     <div class="tariff-price">2399 ₽</div>
                 </div>
-                <ul class="tariff-features">
-                    <li>✅ 3 устройства</li>
-                    <li>✅ Все серверы</li>
-                    <li>✅ Безлимит</li>
-                    <li>🔥 Максимальная выгода</li>
-                </ul>
                 <button class="btn btn-success" onclick="openBot()">Купить</button>
             </div>
         </div>
@@ -876,6 +827,31 @@
         let userData = null;
         let configs = {};
 
+        // Open subscription in Happ
+        function openInHapp() {
+            const subUrl = `https://vinivpnbot.duckdns.org:9443/sub/${userId}`;
+            
+            // Try to open Happ with deep link
+            const happLink = `happ://install-config?url=${encodeURIComponent(subUrl)}`;
+            
+            // Register device first
+            registerDevice();
+            
+            // Try to open app
+            window.location.href = happLink;
+            
+            // Fallback - copy to clipboard
+            setTimeout(() => {
+                navigator.clipboard.writeText(subUrl).then(() => {
+                    tg.showPopup({
+                        title: '📱 Открываем Happ',
+                        message: 'Если приложение не открылось:\n\n1. Установите Happ из App Store/Google Play\n2. Ссылка уже скопирована - вставьте её в Happ\n\nВаше устройство автоматически добавлено!',
+                        buttons: [{type: 'ok'}]
+                    });
+                });
+            }, 1000);
+        }        
+
         // Load user data
         async function loadData() {
             try {
@@ -904,6 +880,7 @@
                     
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('tab-main').style.display = 'block';
+
                     return;
                 }
                 
@@ -957,6 +934,9 @@
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('tab-main').style.display = 'block';
+
+                // Автоматически зарегистрировать устройство
+                registerDevice();
         
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -965,6 +945,36 @@
                     '<p style="font-size: 12px; opacity: 0.7;">' + error.message + '</p>' +
                     '<p style="font-size: 12px; opacity: 0.7;">Откройте через Telegram бота</p>' +
                     '<button class="btn btn-primary" onclick="location.reload()">Обновить</button>';
+            }
+        }
+
+        // Register device automatically
+        async function registerDevice() {
+            if (!userId) return; // Skip for demo mode
+            
+            try {
+                const platform = tg.platform || 'unknown';
+                const version = tg.version || 'unknown';
+                
+                const response = await fetch('https://vinivpnbot.duckdns.org:9443/register_device', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        device_info: {
+                            platform: platform,
+                            version: version
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                console.log('Device registration:', result);
+                
+            } catch (error) {
+                console.error('Failed to register device:', error);
             }
         }
 
