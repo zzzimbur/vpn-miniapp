@@ -520,8 +520,8 @@
                     <div class="server-status" style="background: rgba(74, 222, 128, 0.3);">🔥 Рекомендуем</div>
                 </div>
                 <p style="opacity: 0.9; margin-bottom: 15px;">
-                    Подключите все 3 сервера одним нажатием!<br>
-                    🇳🇱 Яндекс • Госуслуги • VK
+                    Подключите все серверы одним нажатием!<br>
+                    🇳🇱 12 LTE-серверов · Высокая скорость
                 </p>
                 <button class="btn btn-success" onclick="openInHapp()" style="font-size: 16px; padding: 15px;">
                     📱 Подключиться в Happ
@@ -550,9 +550,9 @@
             <div class="server-card">
                 <h3 style="margin-bottom: 15px;">💡 О серверах</h3>
                 <div style="line-height: 2;">
-                    <div>🇳🇱 <b>Яндекс</b> - Быстрый, стабильный</div>
-                    <div>🇳🇱 <b>Госуслуги</b> - Для государственных сайтов</div>
-                    <div>🇳🇱 <b>VK</b> - Для социальных сетей</div>
+                    <div>🇳🇱 <b>12 LTE-серверов</b> в Нидерландах</div>
+                    <div>⚡️ Максимальная скорость без ограничений</div>
+                    <div>🔒 VLESS Reality — не блокируется</div>
                 </div>
                 <div style="margin-top: 15px; padding: 10px; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 13px;">
                     💡 <b>Совет:</b> Happ автоматически выберет лучший сервер для вас!
@@ -918,19 +918,29 @@
         }
 
         // Register device
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('vini_device_id');
+            if (!deviceId) {
+                deviceId = 'tg_' + userId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('vini_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
         async function registerDevice() {
             if (!userId) return;
-            
+
             try {
                 const platform = tg.platform || 'unknown';
                 const version = tg.version || 'unknown';
-                
+                const device_id = getDeviceId();
+
                 await fetch('https://vinivpnbot.duckdns.org:9443/register_device', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         user_id: userId,
-                        device_info: {platform, version}
+                        device_info: {platform, version, device_id}
                     })
                 });
             } catch (error) {
@@ -975,17 +985,17 @@
                         'ios': '📱', 'macos': '💻', 'tdesktop': '💻',
                         'web': '🌐', 'webk': '🌐', 'webz': '🌐'
                     };
-                    const icon = icons[device.type] || '📱';
-                    
-                    const created = new Date(device.created_at).toLocaleDateString('ru-RU');
-                    const lastSeen = new Date(device.last_seen).toLocaleString('ru-RU');
-                    
+                    const icon = icons[device.device_type] || '📱';
+
+                    const created = device.created_at ? new Date(device.created_at).toLocaleDateString('ru-RU') : '—';
+                    const lastSeen = device.last_seen ? new Date(device.last_seen).toLocaleString('ru-RU') : '—';
+
                     html += `
                         <div class="server-card">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                 <div>
                                     <div style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">
-                                        ${icon} ${device.name}
+                                        ${icon} ${device.device_name}
                                     </div>
                                     <div style="font-size: 13px; opacity: 0.7;">
                                         Добавлено: ${created}
@@ -998,7 +1008,7 @@
                             <div style="font-size: 13px; opacity: 0.8; margin-bottom: 15px;">
                                 Последняя активность: ${lastSeen}
                             </div>
-                            <button class="btn btn-secondary" onclick="removeDevice(${device.id}, '${device.name}')" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5);">
+                            <button class="btn btn-secondary" onclick="removeDevice(${device.id}, '${device.device_name}')" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5);">
                                 🗑 Удалить устройство
                             </button>
                         </div>
@@ -1053,7 +1063,7 @@
                 navigator.clipboard.writeText(subUrl).then(() => {
                     tg.showPopup({
                         title: '📱 Подключение к Happ',
-                        message: '✅ Ссылка скопирована!\n\n📖 Инструкция:\n1. Откройте Happ\n2. Нажмите +\n3. Import from URL\n4. Вставьте ссылку\n\nВсе 3 сервера добавятся автоматически!',
+                        message: '✅ Ссылка скопирована!\n\n📖 Инструкция:\n1. Откройте Happ\n2. Нажмите +\n3. Import from URL\n4. Вставьте ссылку\n\nВсе серверы добавятся автоматически!',
                         buttons: [{type: 'ok'}]
                     });
                 }).catch(err => {
@@ -1102,21 +1112,47 @@
         }
 
         // Buy traffic
-        function buyTraffic(gb, price) {
-            tg.showConfirm(`Купить ${gb} GB за ${price} ₽?`, (confirmed) => {
-                if (confirmed) {
-                    tg.sendData(JSON.stringify({action: 'buy_traffic', gb, price}));
-                    tg.showAlert(`Покупка отправлена! Проверьте бота.`);
+        async function buyTraffic(gb, price) {
+            tg.showConfirm(`Купить ${gb} GB за ${price} ₽?`, async (confirmed) => {
+                if (!confirmed) return;
+                try {
+                    const resp = await fetch('https://vinivpnbot.duckdns.org:9443/shop/buy_traffic', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({user_id: userId, gb, price})
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        tg.showAlert(`✅ Куплено ${gb} GB!\nНовый лимит: ${data.new_limit} GB`);
+                        loadData();
+                    } else {
+                        tg.showAlert(`❌ ${data.message || 'Ошибка покупки'}`);
+                    }
+                } catch (e) {
+                    tg.showAlert('❌ Ошибка соединения');
                 }
             });
         }
 
         // Buy slots
-        function buySlots(slots, price) {
-            tg.showConfirm(`Купить ${slots} слот${slots > 1 ? 'а' : ''} за ${price} ₽?`, (confirmed) => {
-                if (confirmed) {
-                    tg.sendData(JSON.stringify({action: 'buy_slots', slots, price}));
-                    tg.showAlert(`Покупка отправлена! Проверьте бота.`);
+        async function buySlots(slots, price) {
+            tg.showConfirm(`Купить ${slots} слот${slots > 1 ? 'а' : ''} за ${price} ₽?`, async (confirmed) => {
+                if (!confirmed) return;
+                try {
+                    const resp = await fetch('https://vinivpnbot.duckdns.org:9443/shop/buy_slots', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({user_id: userId, slots, price})
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        tg.showAlert(`✅ Куплено ${slots} слот(а)!\nВсего слотов: ${data.new_slots}`);
+                        loadData();
+                    } else {
+                        tg.showAlert(`❌ ${data.message || 'Ошибка покупки'}`);
+                    }
+                } catch (e) {
+                    tg.showAlert('❌ Ошибка соединения');
                 }
             });
         }
