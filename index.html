@@ -571,14 +571,12 @@
 
     <div class="card">
         <div class="card-title" style="margin-bottom:14px">Пополнение баланса</div>
-        <div class="support-btn" style="border-radius:var(--radius-sm)" onclick="topUp()">
-            <div class="support-icon" style="background:rgba(249,115,22,0.12)">💳</div>
-            <div class="support-info">
-                <div class="support-name">ЮKassa</div>
-                <div class="support-desc">Карты, СБП, электронные кошельки · 100 – 50 000 ₽</div>
-            </div>
-            <div style="color:var(--muted);font-size:18px">›</div>
+        <div class="input-row" style="margin-bottom:12px">
+            <input class="input" id="topup-amount" type="number" placeholder="Сумма, ₽" min="10" max="50000" style="flex:1">
+            <button class="input-btn" onclick="topUp()" id="topup-btn">Пополнить</button>
         </div>
+        <div style="color:var(--muted);font-size:12px;margin-bottom:4px">Карты, СБП, электронные кошельки · от 10 ₽</div>
+        <div id="topup-error" style="color:#ef4444;font-size:12px;margin-top:6px;display:none"></div>
     </div>
 
     <div class="card" id="bal-history" style="display:none">
@@ -864,8 +862,48 @@ async function buyPlan(days, price) {
     });
 }
 
-function topUp() {
-    tg.openTelegramLink('https://t.me/vinivpnbot?start=topup');
+async function topUp() {
+    const amountInput = document.getElementById('topup-amount');
+    const errorDiv = document.getElementById('topup-error');
+    const btn = document.getElementById('topup-btn');
+    const amount = parseFloat(amountInput.value);
+
+    errorDiv.style.display = 'none';
+
+    if (!amount || amount < 10) {
+        errorDiv.textContent = 'Минимальная сумма — 10 ₽';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    if (!userId) {
+        errorDiv.textContent = 'Не удалось определить пользователя';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    btn.textContent = '...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(`${API_BASE}/payment/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId, amount })
+        });
+        const data = await res.json();
+        if (data.success && data.confirmation_url) {
+            tg.openLink(data.confirmation_url);
+        } else {
+            errorDiv.textContent = data.message || 'Ошибка создания платежа';
+            errorDiv.style.display = 'block';
+        }
+    } catch (e) {
+        errorDiv.textContent = 'Ошибка соединения с сервером';
+        errorDiv.style.display = 'block';
+    } finally {
+        btn.textContent = 'Пополнить';
+        btn.disabled = false;
+    }
 }
 
 async function applyPromo() {
