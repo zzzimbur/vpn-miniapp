@@ -885,7 +885,7 @@ async function topUp() {
     btn.disabled = true;
 
     try {
-        const res = await fetch(`${API_BASE}/payment/create`, {
+        const res = await fetch(`${API}/payment/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id: userId, amount })
